@@ -1,0 +1,29 @@
+package widder.easyitemsign.commands;
+
+import com.mojang.brigadier.arguments.StringArgumentType;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.minecraft.commands.Commands;
+import widder.easyitemsign.load;
+
+public class command {
+
+    public static void RegisterCommand() {
+        CommandRegistrationCallback.EVENT.register((dispatcher, buildContext, selection) -> {
+            dispatcher.register(Commands.literal("sign")
+                    .then(Commands.argument("text", StringArgumentType.greedyString())
+                            .executes(context -> {
+                                return Sign.sign(context.getSource(), StringArgumentType.getString(context, "text"));
+                            }))
+                    .then(Commands.literal("reload").executes(context -> {
+                        return load.load();
+                    })));
+        });
+        CommandRegistrationCallback.EVENT.register((dispatcher, buildContext, selection) -> {
+            dispatcher.register(Commands.literal("unsign")
+                    .executes(context -> {
+                        return UnSign.unsign();
+                    }));
+        });
+    }
+
+}
