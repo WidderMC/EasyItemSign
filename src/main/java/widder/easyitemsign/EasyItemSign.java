@@ -15,14 +15,16 @@ public class EasyItemSign implements ModInitializer {
 		LOGGER.info("Hello Fabric world!");
 
 		command.RegisterCommand();
-
-
 	}
 
 	/*				ToDo´s
-			Place Data Save
 			Unsign Save
 			Load Config Data
+
+			Bookmarks (schift + f11)
+
+
 			Crafting Save
+			Place Data Save
 	 */
 }

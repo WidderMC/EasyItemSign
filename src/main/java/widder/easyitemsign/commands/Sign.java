@@ -1,48 +1,18 @@
 package widder.easyitemsign.commands;
 
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.ItemLore;
-import org.jspecify.annotations.Nullable;
-import widder.easyitemsign.EasyItemSign;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 public class Sign {
     public static int sign(CommandSourceStack source, String text) {
 
-        @Nullable Entity entity = source.getEntity();
-        if (!(entity instanceof ServerPlayer player)) {
-            source.sendSuccess(() -> Component.literal("Command must be executed by a Player"),false);
-            return 0;
+        if (!CanSign(source)) {
+            return 1;
         }
-
-        ItemStack item = player.getMainHandItem();
-        if (item.isEmpty()) {
-            source.sendSuccess(() -> Component.literal("You has to hold an item in their Main Hand"),false);
-            return 0;
-        }
-
-        LocalDate currentDate = LocalDate.now();
-        String playername = player.getName().getString();
-        String dateString = currentDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-
-
-
-
-        Component finalText = ApplyStyle(text);
-
-        //MutableComponent ****************************************************
-        Component Meta = Component.literal("Sign from "+ playername + " on the " + dateString).withStyle(style -> Style.EMPTY.withItalic(false));
 
         /*
     public boolean credits = true;
@@ -60,14 +30,49 @@ public class Sign {
 
 
 
+        /*
+        LocalDate currentDate = LocalDate.now();
+        String playername = player.getName().getString();
+        String dateString = currentDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+
+
+        Component finalText = ApplyStyle(text);
+
+        //MutableComponent ****************************************************
+        Component Meta = Component.literal("Sign from "+ playername + " on the " + dateString).withStyle(style -> Style.EMPTY.withItalic(false));
+
 
         item.set(DataComponents.LORE, new ItemLore(List.of(
                 Component.literal(""),
                 finalText,
                 Component.literal(""),
                 Meta)));
+         */
+
+
+
         return 1;
     }
+
+    private static boolean CanSign(CommandSourceStack source) {
+        //Player run the Command
+        if (!(source.getEntity() instanceof ServerPlayer)) {
+            source.sendFailure(Component.literal("You need to be a player to use this command!"));
+            return false;
+        }
+
+        //Player hold am Item
+        if (source.getPlayer().getMainHandItem().isEmpty()) {
+            source.sendFailure(Component.literal("You need to be holding an item!"));
+            return false;
+        }
+
+        //Item isn't Sign
+        //if () {}
+
+        return true;
+    }
+
     private static Component ApplyStyle(String text) {
         MutableComponent finaltext = Component.empty();
         TextColor currentColor = null;
