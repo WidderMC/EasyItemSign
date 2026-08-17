@@ -14,8 +14,14 @@ public class Sign {
             return 1;
         }
 
+        if (signature) {
+            Component signatureText = SignatureCreate()
+        }
+
+
+
         /*
-    public boolean credits = true;
+    public boolean signature = true;
     public boolean date = true;
     public boolean name = true;
     public boolean boldName = true;
@@ -71,6 +77,19 @@ public class Sign {
         //if () {}
 
         return true;
+    }
+
+    private static Component SignatureCreate() {
+        MutableComponent returnText = new Component.empty();
+        
+        //
+        if (date) {
+            returnText.append(Component.literal("Date Placeholder"));
+        }
+
+        //build signature
+        
+        return returnText;
     }
 
     private static Component ApplyStyle(String text) {

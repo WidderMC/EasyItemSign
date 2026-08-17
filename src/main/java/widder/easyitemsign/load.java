@@ -4,7 +4,7 @@ import static net.fabricmc.fabric.impl.networking.NetworkingImpl.LOGGER;
 
 public class load {
 
-    public boolean credits = true;
+    public boolean signature = true;
     public boolean date = true;
     public boolean name = true;
     public boolean boldName = true;
