@@ -1,63 +1,80 @@
 package widder.easyitemsign.commands;
 
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemLore;
+
+import java.awt.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
+import static widder.easyitemsign.load.*;
 
 public class Sign {
     public static int sign(CommandSourceStack source, String text) {
 
         if (!CanSign(source)) {
-            return 1;
+            return 0;
         }
+
+        ItemStack signItem = source.getPlayer().getMainHandItem();
+        Component signText = ApplyStyle(text);
 
         if (signature) {
-            Component signatureText = SignatureCreate()
+            Component signatureText = SignatureCreate(source);
+            signItem.set(DataComponents.LORE, new ItemLore(List.of(
+                    Component.literal(""),
+                    signText,
+                    Component.literal(""),
+                    signatureText
+            )));
+        }else {
+            signItem.set(DataComponents.LORE, new ItemLore(List.of(
+                    Component.literal(""),
+                    signText
+            )));
+        }
+        
+        return 1;
+    }
+
+    private static Component SignatureCreate(CommandSourceStack source) {
+        //Create MutableComponent
+        MutableComponent returnText = Component.empty();
+        returnText.append(Component.literal("Sign").withStyle(style ->
+                Style.EMPTY.withColor(TextColor.parseColor(defultColor).getOrThrow())));
+
+        //Add Name
+        if (name) {
+            returnText.append(Component.literal(" from ").withStyle(style ->
+                    Style.EMPTY.withColor(TextColor.parseColor(defultColor).getOrThrow())));
+            returnText.append(Component.literal(
+                    source.getPlayer().getPlainTextName()).withStyle(style ->
+                        Style.EMPTY.withColor(
+                                TextColor.parseColor(nameColor).getOrThrow())
+                                .withBold(boldName)));
         }
 
+        //Add Date
+        if (date) {
+            String dateString = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+            returnText.append(Component.literal(" on the ").withStyle(style ->
+                    Style.EMPTY.withColor(TextColor.parseColor(defultColor).getOrThrow())));
+            returnText.append(Component.literal(
+                    dateString).withStyle(style ->
+                        Style.EMPTY.withColor(
+                            TextColor.parseColor(dateColor).getOrThrow())
+                            .withBold(boldDate)));
+        }
 
-
-        /*
-    public boolean signature = true;
-    public boolean date = true;
-    public boolean name = true;
-    public boolean boldName = true;
-    public boolean boldDate = true;
-    public String defultColor = "#AAAAAA";
-    public String nameColor = "#FFAA00";
-    public String dateColor = "#55FFFF";
-         */
-
-
-
-
-
-
-        /*
-        LocalDate currentDate = LocalDate.now();
-        String playername = player.getName().getString();
-        String dateString = currentDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-
-
-        Component finalText = ApplyStyle(text);
-
-        //MutableComponent ****************************************************
-        Component Meta = Component.literal("Sign from "+ playername + " on the " + dateString).withStyle(style -> Style.EMPTY.withItalic(false));
-
-
-        item.set(DataComponents.LORE, new ItemLore(List.of(
-                Component.literal(""),
-                finalText,
-                Component.literal(""),
-                Meta)));
-         */
-
-
-
-        return 1;
+        return returnText;
     }
 
     private static boolean CanSign(CommandSourceStack source) {
@@ -77,19 +94,6 @@ public class Sign {
         //if () {}
 
         return true;
-    }
-
-    private static Component SignatureCreate() {
-        MutableComponent returnText = new Component.empty();
-        
-        //
-        if (date) {
-            returnText.append(Component.literal("Date Placeholder"));
-        }
-
-        //build signature
-        
-        return returnText;
     }
 
     private static Component ApplyStyle(String text) {
