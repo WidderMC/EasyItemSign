@@ -10,7 +10,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemLore;
 
-import java.awt.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -27,6 +26,7 @@ public class Sign {
         ItemStack signItem = source.getPlayer().getMainHandItem();
         Component signText = ApplyStyle(text);
 
+        //sign item
         if (signature) {
             Component signatureText = SignatureCreate(source);
             signItem.set(DataComponents.LORE, new ItemLore(List.of(
@@ -35,13 +35,16 @@ public class Sign {
                     Component.literal(""),
                     signatureText
             )));
+            //Add Unsign Protecktion
+
         }else {
             signItem.set(DataComponents.LORE, new ItemLore(List.of(
                     Component.literal(""),
                     signText
             )));
+            //Add Unsign Protecktion
         }
-        
+
         return 1;
     }
 
@@ -49,12 +52,12 @@ public class Sign {
         //Create MutableComponent
         MutableComponent returnText = Component.empty();
         returnText.append(Component.literal("Sign").withStyle(style ->
-                Style.EMPTY.withColor(TextColor.parseColor(defultColor).getOrThrow())));
+                Style.EMPTY.withColor(TextColor.parseColor(defaultColor).getOrThrow())));
 
         //Add Name
         if (name) {
             returnText.append(Component.literal(" from ").withStyle(style ->
-                    Style.EMPTY.withColor(TextColor.parseColor(defultColor).getOrThrow())));
+                    Style.EMPTY.withColor(TextColor.parseColor(defaultColor).getOrThrow())));
             returnText.append(Component.literal(
                     source.getPlayer().getPlainTextName()).withStyle(style ->
                         Style.EMPTY.withColor(
@@ -66,7 +69,7 @@ public class Sign {
         if (date) {
             String dateString = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
             returnText.append(Component.literal(" on the ").withStyle(style ->
-                    Style.EMPTY.withColor(TextColor.parseColor(defultColor).getOrThrow())));
+                    Style.EMPTY.withColor(TextColor.parseColor(defaultColor).getOrThrow())));
             returnText.append(Component.literal(
                     dateString).withStyle(style ->
                         Style.EMPTY.withColor(

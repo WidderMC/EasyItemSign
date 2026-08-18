@@ -1,12 +1,16 @@
 package widder.easyitemsign.commands;
 
-import static net.fabricmc.fabric.impl.networking.NetworkingImpl.LOGGER;
+import widder.easyitemsign.EasyItemSign;
+
+import static widder.easyitemsign.load.signature;
 
 public class UnSign {
 
     public static int unsign() {
 
-        LOGGER.info("unsign");
+        EasyItemSign.LOGGER.info(""+ signature);
+
+        EasyItemSign.LOGGER.info("unsign");
 
         return 1;
     }
