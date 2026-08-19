@@ -2,12 +2,14 @@ package widder.easyitemsign.commands;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.ItemLore;
 
 import java.time.LocalDate;
@@ -35,14 +37,20 @@ public class Sign {
                     Component.literal(""),
                     signatureText
             )));
-            //Add Unsign Protecktion
+            //Add Unsign Protection
+            CompoundTag tag = new CompoundTag();
+            tag.putString("easyitemsign_owner", source.getPlayer().getName().getString());
+            signItem.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
 
         }else {
             signItem.set(DataComponents.LORE, new ItemLore(List.of(
                     Component.literal(""),
                     signText
             )));
-            //Add Unsign Protecktion
+            //Add Unsign Protection
+            CompoundTag tag = new CompoundTag();
+            tag.putString("easyitemsign_owner", source.getPlayer().getName().getString());
+            signItem.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
         }
 
         return 1;
@@ -51,7 +59,7 @@ public class Sign {
     private static Component SignatureCreate(CommandSourceStack source) {
         //Create MutableComponent
         MutableComponent returnText = Component.empty();
-        returnText.append(Component.literal("Sign").withStyle(style ->
+        returnText.append(Component.literal("Signed").withStyle(style ->
                 Style.EMPTY.withColor(TextColor.parseColor(defaultColor).getOrThrow())));
 
         //Add Name
@@ -89,12 +97,24 @@ public class Sign {
 
         //Player hold am Item
         if (source.getPlayer().getMainHandItem().isEmpty()) {
-            source.sendFailure(Component.literal("You need to be holding an item!"));
+            source.sendFailure(Component.literal("You need to hold an item!"));
             return false;
         }
 
         //Item isn't Sign
-        //if () {}
+        if (source.getPlayer().getMainHandItem().has(DataComponents.CUSTOM_DATA)) {
+            CompoundTag savedTag = source.getPlayer().getMainHandItem().get(DataComponents.CUSTOM_DATA).copyTag();
+            if (savedTag.contains("easyitemsign_owner")) {
+                String name = savedTag.getStringOr("easyitemsign_owner","");
+                if (name.equals(source.getPlayer().getName().getString())) {
+                    source.sendFailure(Component.literal("The item is already singed"));
+                    return false;
+                }else {
+                    source.sendFailure(Component.literal("The item is already singed"));
+                    return false;
+                }
+            }
+        }
 
         return true;
     }

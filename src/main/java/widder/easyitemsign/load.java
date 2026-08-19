@@ -9,8 +9,6 @@ import java.io.FileWriter;
 import java.nio.file.Path;
 import java.util.Properties;
 
-import static net.fabricmc.fabric.impl.networking.NetworkingImpl.LOGGER;
-
 public class load {
     public static boolean signature = true;
     public static boolean date = true;

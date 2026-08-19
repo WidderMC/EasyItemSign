@@ -17,7 +17,7 @@ public class command {
         CommandRegistrationCallback.EVENT.register((dispatcher, buildContext, selection) -> {
             dispatcher.register(Commands.literal("unsign")
                     .executes(context -> {
-                        return UnSign.unsign();
+                        return UnSign.unsign(context.getSource());
                     }));
         });
     }

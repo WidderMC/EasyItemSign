@@ -17,14 +17,4 @@ public class EasyItemSign implements ModInitializer {
 		load.load();
 		command.RegisterCommand();
 	}
-
-	/*				ToDo´s
-			Unsign Save
-
-			Bookmarks (schift + f11)
-
-
-			Crafting Save
-			Place Data Save
-	 */
 }
