@@ -16,7 +16,7 @@ public class command {
                     .then(Commands.literal("add")
                         .then(Commands.argument("text", StringArgumentType.greedyString())
                             .executes(context -> {
-                                return Sign.sign(context.getSource(), StringArgumentType.getString(context, "text"), treu);
+                                return Sign.sign(context.getSource(), StringArgumentType.getString(context, "text"), true);
                             }))));
         });
         CommandRegistrationCallback.EVENT.register((dispatcher, buildContext, selection) -> {
