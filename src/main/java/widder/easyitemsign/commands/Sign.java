@@ -108,7 +108,7 @@ public class Sign {
                 String name = savedTag.getStringOr("easyitemsign_owner","");
                 if (name.equals(source.getPlayer().getName().getString())) {
                     source.sendFailure(Component.literal("The item is already singed"));
-                    return false
+                    return false;
                 }else {
                     source.sendFailure(Component.literal("The item is already singed"));
                     return false;
