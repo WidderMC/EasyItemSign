@@ -19,7 +19,7 @@ import java.util.List;
 import static widder.easyitemsign.load.*;
 
 public class Sign {
-    public static int sign(CommandSourceStack source, String text) {
+    public static int sign(CommandSourceStack source, String text, boolean add) {
 
         if (!CanSign(source)) {
             return 0;
@@ -108,7 +108,7 @@ public class Sign {
                 String name = savedTag.getStringOr("easyitemsign_owner","");
                 if (name.equals(source.getPlayer().getName().getString())) {
                     source.sendFailure(Component.literal("The item is already singed"));
-                    return false;
+                    return false
                 }else {
                     source.sendFailure(Component.literal("The item is already singed"));
                     return false;

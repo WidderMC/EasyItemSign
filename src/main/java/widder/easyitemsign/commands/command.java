@@ -11,8 +11,13 @@ public class command {
             dispatcher.register(Commands.literal("sign")
                     .then(Commands.argument("text", StringArgumentType.greedyString())
                             .executes(context -> {
-                                return Sign.sign(context.getSource(), StringArgumentType.getString(context, "text"));
-                            })));
+                                return Sign.sign(context.getSource(), StringArgumentType.getString(context, "text"), false);
+                            }))
+                    .then(commands.literal("add")
+                        .then(Commands.argument("text", StringArgumentType.greedyString())
+                            .executes(context -> {
+                                return Sign.sign(context.getSource(), StringArgumentType.getString(context, "text"), treu);
+                            }))));
         });
         CommandRegistrationCallback.EVENT.register((dispatcher, buildContext, selection) -> {
             dispatcher.register(Commands.literal("unsign")
