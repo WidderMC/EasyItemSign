@@ -1,9 +1,24 @@
-# EasyItemSign
+# Easy Item Sign
+### It’s a small mod that lets you sign items, like you might know from some servers.
 
-## Setup
+To Sing a Item:
 
-For setup instructions, please see the [Fabric Documentation page](https://docs.fabricmc.net/develop/getting-started/creating-a-project#setting-up) related to the IDE that you are using.
+    /sign <Text>
 
-## License
+To expand the Sign:
 
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+    /sign add <Text>
+
+### Style and Symbols
+- Italic = <>
+- Obfuscated = {}
+- Bold = []
+- Strickethrough = ()
+- Underlined = /|
+- Color = #XXXXXX <-HexCode
+
+To make it easier, there's a Website where you can enter the Text and the Style and the Command are created automatically for you.
+
+[The Website](Comming soon)
+
+If you find any bugs or have any Datapack/Mod suggestions, please let me know on my [Discord](https://discord.gg/fy4KuxYKVD).
