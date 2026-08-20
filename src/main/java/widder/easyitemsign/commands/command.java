@@ -13,7 +13,7 @@ public class command {
                             .executes(context -> {
                                 return Sign.sign(context.getSource(), StringArgumentType.getString(context, "text"), false);
                             }))
-                    .then(commands.literal("add")
+                    .then(Commands.literal("add")
                         .then(Commands.argument("text", StringArgumentType.greedyString())
                             .executes(context -> {
                                 return Sign.sign(context.getSource(), StringArgumentType.getString(context, "text"), treu);
