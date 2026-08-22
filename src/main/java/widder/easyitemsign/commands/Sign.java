@@ -14,6 +14,7 @@ import net.minecraft.world.item.component.ItemLore;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import static widder.easyitemsign.load.*;
@@ -21,39 +22,58 @@ import static widder.easyitemsign.load.*;
 public class Sign {
     public static int sign(CommandSourceStack source, String text, boolean add) {
 
-        if (!CanSign(source)) {
+        if (!CanSign(source, add)) {
             return 0;
         }
 
         ItemStack signItem = source.getPlayer().getMainHandItem();
         Component signText = ApplyStyle(text);
 
-        //sign item
-        if (signature) {
-            Component signatureText = SignatureCreate(source);
-            signItem.set(DataComponents.LORE, new ItemLore(List.of(
-                    Component.literal(""),
-                    signText,
-                    Component.literal(""),
-                    signatureText
-            )));
-            //Add Unsign Protection
-            CompoundTag tag = new CompoundTag();
-            tag.putString("easyitemsign_owner", source.getPlayer().getName().getString());
-            signItem.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
+        //Build Lore
+        List<Component> loreList = buildLoreList(source, signText);
 
-        }else {
-            signItem.set(DataComponents.LORE, new ItemLore(List.of(
-                    Component.literal(""),
-                    signText
-            )));
-            //Add Unsign Protection
-            CompoundTag tag = new CompoundTag();
-            tag.putString("easyitemsign_owner", source.getPlayer().getName().getString());
-            signItem.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
-        }
+        //Add/Create Lore on Item
+        applyLore(signItem, loreList, add);
+
+        //Add Unsign Protection
+        applyUnsignProtection(source, signItem);
 
         return 1;
+    }
+
+    private static void applyUnsignProtection(CommandSourceStack source, ItemStack signItem) {
+        CompoundTag tag = new CompoundTag();
+        tag.putString("easyitemsign_owner", source.getPlayer().getName().getString());
+        signItem.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
+    }
+
+    private static void applyLore(ItemStack signItem, List<Component> loreList, boolean add) {
+        if (add) {
+            ItemLore existingLore = signItem.get(DataComponents.LORE);
+            List<Component> combinedLore = new ArrayList<>();
+
+            if (existingLore != null) {
+                combinedLore.addAll(existingLore.lines());
+            }
+            combinedLore.addAll(loreList);
+
+            signItem.set(DataComponents.LORE, new ItemLore(combinedLore));
+        } else  {
+            signItem.set(DataComponents.LORE, new ItemLore(loreList));
+        }
+    }
+
+    private static List<Component> buildLoreList(CommandSourceStack source, Component signText) {
+        List<Component> loreList = new ArrayList<>();
+        loreList.add(Component.literal(""));
+        loreList.add(signText);
+
+        if (signature) {
+            loreList.add(Component.literal(""));
+            loreList.add(SignatureCreate(source));
+        }
+
+        return loreList;
     }
 
     private static Component SignatureCreate(CommandSourceStack source) {
@@ -88,7 +108,7 @@ public class Sign {
         return returnText;
     }
 
-    private static boolean CanSign(CommandSourceStack source) {
+    private static boolean CanSign(CommandSourceStack source, boolean add) {
         //Player run the Command
         if (!(source.getEntity() instanceof ServerPlayer)) {
             source.sendFailure(Component.literal("You need to be a player to use this command!"));
@@ -107,8 +127,12 @@ public class Sign {
             if (savedTag.contains("easyitemsign_owner")) {
                 String name = savedTag.getStringOr("easyitemsign_owner","");
                 if (name.equals(source.getPlayer().getName().getString())) {
-                    source.sendFailure(Component.literal("The item is already singed"));
-                    return false;
+                    if (add) {
+                        return true;
+                    } else {
+                        source.sendFailure(Component.literal("The item is already singed"));
+                        return false;
+                    }
                 }else {
                     source.sendFailure(Component.literal("The item is already singed"));
                     return false;
