@@ -11,6 +11,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.ItemLore;
+import widder.easyitemsign.EasyItemSign;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -50,15 +51,14 @@ public class Sign {
     private static void applyLore(ItemStack signItem, List<Component> loreList, boolean add) {
         if (add) {
             ItemLore existingLore = signItem.get(DataComponents.LORE);
-            List<Component> combinedLore = new ArrayList<>();
-
-            if (existingLore != null) {
-                combinedLore.addAll(existingLore.lines());
+            if (existingLore != null && existingLore.lines().size() >= 2) {
+                Component combined = Component.empty()
+                        .append(existingLore.lines().get(1))
+                        .append(loreList.get(1));
+                loreList.set(1, combined);
+                signItem.set(DataComponents.LORE, new ItemLore(loreList));
             }
-            combinedLore.addAll(loreList);
-
-            signItem.set(DataComponents.LORE, new ItemLore(combinedLore));
-        } else  {
+        } else {
             signItem.set(DataComponents.LORE, new ItemLore(loreList));
         }
     }
