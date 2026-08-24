@@ -3,13 +3,13 @@
 	"id": "easyitemsign",
 	"version": "${version}",
 	"name": "EasyItemSign",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "It’s a small mod that lets you sign items!",
 	"authors": [
-		"Me!"
+		"Widder"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://modrinth.com/user/Widder",
+		"sources": "https://github.com/WidderMC/EasyItemSign"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/easyitemsign/icon.png",
